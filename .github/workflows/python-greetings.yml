@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "dev"
-          PORT: 7001
+          PORT: ${{ env.DEV_PORT }}
 
   test-dev:
     runs-on: self-hosted
