@@ -13,7 +13,7 @@ env:
 
 jobs:
   install-pip-deps:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3.5.2
@@ -31,7 +31,7 @@ jobs:
 
   deploy-dev:
     needs: install-pip-deps
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Deploy to dev
         uses: ./.github/actions/deploy
@@ -40,7 +40,7 @@ jobs:
           PORT: ${{ env.DEV_PORT }}
 
   test-dev:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: deploy-dev
     steps:
       - name: Clone course-js-api-framework repository
@@ -51,7 +51,7 @@ jobs:
           path: course-js-api-framework
 
   deploy-staging:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: test-dev
     steps:
       - name: Deploy to staging
@@ -67,7 +67,7 @@ jobs:
         run: pm2 start app.py --name greetings-app-staging -- --port ${{ env.STAGING_PORT }}
 
   test-staging:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: deploy-staging
     steps:
       - name: Clone course-js-api-framework repository
@@ -78,7 +78,7 @@ jobs:
           path: course-js-api-framework
 
   deploy-preprod:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: test-staging
     steps:
       - name: Deploy to preprod
@@ -89,7 +89,7 @@ jobs:
 
 
   test-preprod:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: deploy-preprod
     steps:
       - name: Clone course-js-api-framework repository
@@ -101,7 +101,7 @@ jobs:
 
 
   deploy-prod:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: test-preprod
     steps:
       - name: Deploy to prod
