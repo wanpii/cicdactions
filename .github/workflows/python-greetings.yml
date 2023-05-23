@@ -24,10 +24,6 @@ jobs:
           repository: mtararujs/python-greetings
           path: python-greetings
 
-      - name: Verify Cloned Repository
-        run: |
-          dir python-greetings
-
       - name: Install Pip Dependencies
         working-directory: python-greetings
         run: |
@@ -38,7 +34,6 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Deploy to dev
-        working-directory: python-greetings
         uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "dev"
