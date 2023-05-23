@@ -7,13 +7,13 @@ runs:
       uses: actions/checkout@v3.5.2
 
     - name: Stop existing app
-      working-directory: python-greetings
+      working-directory: ./python-greetings
       run: |
         cd python-greetings
         pm2 delete greetings-app-$ENVIRONMENT
       shell: powershell
     - name: Start app
-      working-directory: python-greetings
+      working-directory: ./python-greetings
       run: |
         cd python-greetings
         pm2 start app.py --name greetings-app-$ENVIRONMENT -- --port $PORT
