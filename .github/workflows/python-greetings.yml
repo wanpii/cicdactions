@@ -50,6 +50,7 @@ jobs:
           repository: mtararujs/course-js-api-framework
           ref: main
           path: course-js-api-framework
+          clean: false
 
   deploy-staging:
     runs-on: self-hosted
@@ -71,6 +72,7 @@ jobs:
           repository: mtararujs/course-js-api-framework
           ref: main
           path: course-js-api-framework
+          clean: false
 
   deploy-preprod:
     runs-on: self-hosted
@@ -93,6 +95,7 @@ jobs:
           repository: mtararujs/course-js-api-framework
           ref: main
           path: course-js-api-framework
+          clean: false
 
 
   deploy-prod:
