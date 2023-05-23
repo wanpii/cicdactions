@@ -25,6 +25,7 @@ jobs:
           path: python-greetings
 
       - name: Install Pip Dependencies
+        working-directory: python-greetings
         run: |
           pip install -r requirements.txt
 
@@ -58,12 +59,6 @@ jobs:
         env:
           ENVIRONMENT: "staging"
           PORT: ${{ env.STAGING_PORT }}
-      - name: Stop existing staging service
-        run: pm2 delete greetings-app-staging & set "errorlevel=0"
-
-      - name: Start staging service
-        working-directory: ./python-greetings
-        run: pm2 start app.py --name greetings-app-staging -- --port ${{ env.STAGING_PORT }}
 
   test-staging:
     runs-on: self-hosted

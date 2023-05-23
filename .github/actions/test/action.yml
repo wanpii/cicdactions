@@ -12,11 +12,13 @@ runs:
         node-version: "14.x"
 
     - name: Install dependencies
+      working-directory: course-js-api-framework
       run: |
         cd course-js-api-framework
         npm install
       shell: powershell
     - name: Run tests
+      working-directory: course-js-api-framework
       run: |
         cd course-js-api-framework
         npm run greetings greetings_$ENVIRONMENT
