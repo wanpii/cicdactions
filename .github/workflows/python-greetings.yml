@@ -30,6 +30,12 @@ jobs:
     needs: install-pip-deps
     runs-on: self-hosted
     steps:
+      - name: Clone python-greetings Repository
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+
       - name: Deploy to dev
         uses: ./.github/actions/deploy
         env:
@@ -52,6 +58,12 @@ jobs:
     runs-on: self-hosted
     needs: test-dev
     steps:
+      - name: Clone python-greetings Repository
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+
       - name: Deploy to staging
         uses: ./.github/actions/deploy
         env:
@@ -74,6 +86,12 @@ jobs:
     runs-on: self-hosted
     needs: test-staging
     steps:
+      - name: Clone python-greetings Repository
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+
       - name: Deploy to preprod
         uses: ./.github/actions/deploy
         env:
@@ -97,6 +115,12 @@ jobs:
     runs-on: self-hosted
     needs: test-preprod
     steps:
+      - name: Clone python-greetings Repository
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+
       - name: Deploy to prod
         uses: ./.github/actions/deploy
         env:
