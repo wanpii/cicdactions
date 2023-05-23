@@ -13,13 +13,13 @@ env:
 
 jobs:
   checkout-repo:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3.5.2
 
   setup-python:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: checkout-repo
     steps:
       - name: Set up Python
@@ -32,7 +32,7 @@ jobs:
           pip install -r requirements.txt
 
   clone-python-greetings:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: setup-python
     steps:
       - name: Clone python-greetings repository
@@ -43,7 +43,7 @@ jobs:
           path: python-greetings
 
   deploy-dev:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: clone-python-greetings
     steps:
       - name: Deploy to dev
@@ -59,7 +59,7 @@ jobs:
         run: pm2 start app.py --name greetings-app-dev -- --port ${{ env.DEV_PORT }}
 
   test-dev:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: deploy-dev
     steps:
       - name: Clone course-js-api-framework repository
@@ -78,7 +78,7 @@ jobs:
         run: npm run greetings greetings_dev
 
   deploy-staging:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: test-dev
     steps:
       - name: Deploy to staging
@@ -94,7 +94,7 @@ jobs:
         run: pm2 start app.py --name greetings-app-staging -- --port ${{ env.STAGING_PORT }}
 
   test-staging:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: deploy-staging
     steps:
       - name: Clone course-js-api-framework repository
@@ -113,7 +113,7 @@ jobs:
         run: npm run greetings greetings_staging
 
   deploy-preprod:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: test-staging
     steps:
       - name: Deploy to preprod
@@ -129,7 +129,7 @@ jobs:
         run: pm2 start app.py --name greetings-app-preprod -- --port ${{ env.PREPROD_PORT }}
 
   test-preprod:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: deploy-preprod
     steps:
       - name: Clone course-js-api-framework repository
@@ -148,7 +148,7 @@ jobs:
         run: npm run greetings greetings_preprod
 
   deploy-prod:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: test-preprod
     steps:
       - name: Deploy to prod
