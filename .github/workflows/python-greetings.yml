@@ -38,6 +38,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Deploy to dev
+        working-directory: python-greetings
         uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "dev"
