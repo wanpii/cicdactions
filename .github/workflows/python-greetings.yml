@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to dev
-      - uses: ./.github/actions/deploy
+        uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "dev"
           PORT: ${{ env.DEV_PORT }}
@@ -44,7 +44,7 @@ jobs:
     needs: deploy-dev
     steps:
       - name: Clone course-js-api-framework repository
-      - uses: ./.github/actions/test
+        uses: ./.github/actions/test
         with:
           repository: mtararujs/course-js-api-framework
           ref: main
@@ -55,7 +55,7 @@ jobs:
     needs: test-dev
     steps:
       - name: Deploy to staging
-      - uses: ./.github/actions/deploy
+        uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "staging"
           PORT: ${{ env.STAGING_PORT }}
@@ -71,7 +71,7 @@ jobs:
     needs: deploy-staging
     steps:
       - name: Clone course-js-api-framework repository
-      - uses: ./.github/actions/test
+        uses: ./.github/actions/test
         with:
           repository: mtararujs/course-js-api-framework
           ref: main
@@ -82,7 +82,7 @@ jobs:
     needs: test-staging
     steps:
       - name: Deploy to preprod
-      - uses: ./.github/actions/deploy
+        uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "preprod"
           PORT: ${{ env.PREPROD_PORT }}
@@ -93,7 +93,7 @@ jobs:
     needs: deploy-preprod
     steps:
       - name: Clone course-js-api-framework repository
-      - uses: ./.github/actions/test
+        uses: ./.github/actions/test
         with:
           repository: mtararujs/course-js-api-framework
           ref: main
@@ -105,7 +105,7 @@ jobs:
     needs: test-preprod
     steps:
       - name: Deploy to prod
-      - uses: ./.github/actions/deploy
+        uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "prod"
           PORT: ${{ env.PROD_PORT }}
