@@ -5,7 +5,7 @@ runs:
   steps:
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
-      shell: powershell
+
     - name: Stop existing app
       run: |
         cd python-greetings
