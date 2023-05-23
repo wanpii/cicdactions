@@ -12,39 +12,26 @@ env:
   PROD_PORT: "7004"
 
 jobs:
-  checkout-repo:
-    runs-on: ubuntu-latest
+   install-pip-deps:
+    runs-on: self-hosted
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3.5.2
 
-    clone-python-greetings:
-        runs-on: ubuntu-latest
-        needs: checkout-repo
-        steps:
-          - name: Clone python-greetings repository
-            uses: actions/checkout@v3.5.2
-            with:
-              repository: mtararujs/python-greetings
-              ref: main
-              path: python-greetings
-
-  setup-python:
-    runs-on: ubuntu-latest
-    needs: clone-python-greetings
-    steps:
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Clone python-greetings Repository
+        uses: actions/checkout@v3.5.2
         with:
-          python-version: 3.x
+          repository: mtararujs/python-greetings
+          path: python-greetings
 
-      - name: Install pip dependencies
+      - name: Install Pip Dependencies
+        working-directory: python-greetings
         run: |
           pip install -r requirements.txt
 
   deploy-dev:
     runs-on: ubuntu-latest
-    needs: setup-python
+    needs: install-pip-deps
     steps:
       - name: Deploy to dev
         uses: ./.github/actions/deploy
