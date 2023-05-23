@@ -4,9 +4,9 @@ runs:
   using: 'composite'
   steps:
     - name: 'Stop existing app'
-      run: pm2 delete greetings-app-${{inputs.environment}}
+      run: pm2 delete greetings-app-$ENVIRONMENT
       shell: powershell
 
     - name: 'Start app'
-      run: pm2 start app.py --name greetings-app-${{inputs.environment}} -- --port ${{inputs.port}}
+      run: pm2 start app.py --name greetings-app-$ENVIRONMENT -- --port $PORT
       shell: powershell
