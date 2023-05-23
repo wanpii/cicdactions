@@ -26,6 +26,7 @@ jobs:
 
       - name: Install Pip Dependencies
         working-directory: python-greetings
+        clean: false
         run: |
           pip install -r requirements.txt
 
