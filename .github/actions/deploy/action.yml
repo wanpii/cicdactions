@@ -5,14 +5,14 @@ runs:
   steps:
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
-
+      shell: powershell
     - name: Stop existing app
       run: |
         cd python-greetings
         pm2 delete greetings-app-$ENVIRONMENT & EXIT /B 0
-      shell: bat
+      shell: powershell
     - name: Start app
       run: |
         cd python-greetings
         pm2 start app.py --name greetings-app-$ENVIRONMENT -- --port $PORT
-      shell: bat
+      shell: powershell
