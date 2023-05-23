@@ -10,8 +10,9 @@ runs:
       run: |
         cd python-greetings
         pm2 delete greetings-app-$ENVIRONMENT & EXIT /B 0
-
+      shell: bat
     - name: Start app
       run: |
         cd python-greetings
         pm2 start app.py --name greetings-app-$ENVIRONMENT -- --port $PORT
+      shell: bat
