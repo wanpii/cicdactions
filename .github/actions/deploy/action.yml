@@ -1,5 +1,11 @@
 name: 'deploy'
-
+inputs:
+  ENVIRONMENT:
+    description: ' env variable'
+    required: true
+  PORT:
+    description: ' port variable'
+    required: true
 runs:
   using: 'composite'
   steps:
