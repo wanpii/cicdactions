@@ -6,16 +6,6 @@ runs:
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.x
-
-    - name: Install dependencies
-      run: |
-        cd python-greetings
-        pip install -r requirements.txt
-
     - name: Stop existing app
       run: |
         cd python-greetings
