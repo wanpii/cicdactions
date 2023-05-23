@@ -1,0 +1,22 @@
+name: test
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3.5.2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: "14.x"
+
+    - name: Install dependencies
+      run: |
+        cd course-js-api-framework
+        npm install
+
+    - name: Run tests
+      run: |
+        cd course-js-api-framework
+        npm run greetings greetings_$ENVIRONMENT

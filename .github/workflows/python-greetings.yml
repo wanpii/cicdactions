@@ -1,0 +1,71 @@
+name: Python Greetings Pipeline
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DEV_PORT: "7001"
+  STAGING_PORT: "7002"
+  PREPROD_PORT: "7003"
+  PROD_PORT: "7004"
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3.5.2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install pip dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Deploy to dev
+        uses: ./.github/actions/deploy
+        env:
+          ENVIRONMENT: "dev"
+          PORT: ${{ env.DEV_PORT }}
+
+      - name: Tests on dev
+        uses: ./.github/actions/test
+        env:
+          ENVIRONMENT: "dev"
+
+      - name: Deploy to staging
+        uses: ./.github/actions/deploy
+        env:
+          ENVIRONMENT: "staging"
+          PORT: ${{ env.STAGING_PORT }}
+
+      - name: Tests on staging
+        uses: ./.github/actions/test
+        env:
+          ENVIRONMENT: "staging"
+
+      - name: Deploy to preprod
+        uses: ./.github/actions/deploy
+        env:
+          ENVIRONMENT: "preprod"
+          PORT: ${{ env.PREPROD_PORT }}
+
+      - name: Tests on preprod
+        uses: ./.github/actions/test
+        env:
+          ENVIRONMENT: "preprod"
+
+      - name: Deploy to prod
+        uses: ./.github/actions/deploy
+        env:
+          ENVIRONMENT: "prod"
+          PORT: ${{ env.PROD_PORT }}
+
+      - name: Tests on prod
+        uses: ./.github/actions/test
+        env:
+          ENVIRONMENT: "prod"
