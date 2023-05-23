@@ -5,10 +5,10 @@ runs:
   steps:
     - name: 'Stop existing app'
       run: |
-        pm2 delete greetings-app-$ENVIRONMENT
+        pm2 delete greetings-app-${{ env.ENVIRONMENT }}
       shell: powershell
 
     - name: 'Start app'
       run: |
-        pm2 start app.py --name greetings-app-$ENVIRONMENT -- --port $PORT
+        pm2 start app.py --name greetings-app-${{ env.ENVIRONMENT }} -- --port ${{ env.PORT }}
       shell: powershell
