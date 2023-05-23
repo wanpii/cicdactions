@@ -14,11 +14,7 @@ env:
 jobs:
   install-pip-deps:
     runs-on: self-hosted
-    clean: false
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3.5.2
-
       - name: Clone python-greetings Repository
         uses: actions/checkout@v3.5.2
         with:
@@ -43,7 +39,6 @@ jobs:
   test-dev:
     runs-on: self-hosted
     needs: deploy-dev
-    clean: false
     steps:
       - name: Clone course-js-api-framework repository
         uses: ./.github/actions/test
@@ -51,7 +46,8 @@ jobs:
           repository: mtararujs/course-js-api-framework
           ref: main
           path: course-js-api-framework
-
+          clean: false
+          
   deploy-staging:
     runs-on: self-hosted
     needs: test-dev
@@ -65,7 +61,6 @@ jobs:
   test-staging:
     runs-on: self-hosted
     needs: deploy-staging
-    clean: false
     steps:
       - name: Clone course-js-api-framework repository
         uses: ./.github/actions/test
@@ -73,7 +68,8 @@ jobs:
           repository: mtararujs/course-js-api-framework
           ref: main
           path: course-js-api-framework
-
+          clean: false
+          
   deploy-preprod:
     runs-on: self-hosted
     needs: test-staging
@@ -88,7 +84,6 @@ jobs:
   test-preprod:
     runs-on: self-hosted
     needs: deploy-preprod
-    clean: false
     steps:
       - name: Clone course-js-api-framework repository
         uses: ./.github/actions/test
@@ -96,7 +91,7 @@ jobs:
           repository: mtararujs/course-js-api-framework
           ref: main
           path: course-js-api-framework
-
+          clean: false
 
   deploy-prod:
     runs-on: self-hosted

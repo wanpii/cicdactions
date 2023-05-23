@@ -5,7 +5,10 @@ runs:
   steps:
     - name: Checkout repository
       uses: actions/checkout@v3.5.2
-
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+          
     - name: Stop existing app
       working-directory: python-greetings
       run: |
