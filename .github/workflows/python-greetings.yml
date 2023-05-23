@@ -11,12 +11,16 @@ env:
   PROD_PORT: "7004"
 
 jobs:
-  build-and-deploy:
+  checkout-repo:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3.5.2
 
+  setup-python:
+    runs-on: self-hosted
+    needs: checkout-repo
+    steps:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -26,45 +30,77 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+  deploy-dev:
+    runs-on: self-hosted
+    needs: setup-python
+    steps:
       - name: Deploy to dev
         uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "dev"
           PORT: ${{ env.DEV_PORT }}
 
+  test-dev:
+    runs-on: self-hosted
+    needs: deploy-dev
+    steps:
       - name: Tests on dev
         uses: ./.github/actions/test
         env:
           ENVIRONMENT: "dev"
 
+  deploy-staging:
+    runs-on: self-hosted
+    needs: test-dev
+    steps:
       - name: Deploy to staging
         uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "staging"
           PORT: ${{ env.STAGING_PORT }}
 
+  test-staging:
+    runs-on: self-hosted
+    needs: deploy-staging
+    steps:
       - name: Tests on staging
         uses: ./.github/actions/test
         env:
           ENVIRONMENT: "staging"
 
+  deploy-preprod:
+    runs-on: self-hosted
+    needs: test-staging
+    steps:
       - name: Deploy to preprod
         uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "preprod"
           PORT: ${{ env.PREPROD_PORT }}
 
+  test-preprod:
+    runs-on: self-hosted
+    needs: deploy-preprod
+    steps:
       - name: Tests on preprod
         uses: ./.github/actions/test
         env:
           ENVIRONMENT: "preprod"
 
+  deploy-prod:
+    runs-on: self-hosted
+    needs: test-preprod
+    steps:
       - name: Deploy to prod
         uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "prod"
           PORT: ${{ env.PROD_PORT }}
 
+  test-prod:
+    runs-on: self-hosted
+    needs: deploy-prod
+    steps:
       - name: Tests on prod
         uses: ./.github/actions/test
         env:
