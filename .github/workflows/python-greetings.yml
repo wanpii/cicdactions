@@ -1,4 +1,5 @@
 name: Python Greetings Pipeline
+
 on:
   push:
     branches:
@@ -30,24 +31,51 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-  deploy-dev:
+  clone-python-greetings:
     runs-on: self-hosted
     needs: setup-python
+    steps:
+      - name: Clone python-greetings repository
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: mtararujs/python-greetings
+          ref: main
+          path: python-greetings
+
+  deploy-dev:
+    runs-on: self-hosted
+    needs: clone-python-greetings
     steps:
       - name: Deploy to dev
         uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "dev"
           PORT: ${{ env.DEV_PORT }}
+      - name: Stop existing dev service
+        run: pm2 delete greetings-app-dev & set "errorlevel=0"
+
+      - name: Start dev service
+        working-directory: ./python-greetings
+        run: pm2 start app.py --name greetings-app-dev -- --port ${{ env.DEV_PORT }}
 
   test-dev:
     runs-on: self-hosted
     needs: deploy-dev
     steps:
-      - name: Tests on dev
-        uses: ./.github/actions/test
-        env:
-          ENVIRONMENT: "dev"
+      - name: Clone course-js-api-framework repository
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: mtararujs/course-js-api-framework
+          ref: main
+          path: course-js-api-framework
+
+      - name: Install test dependencies
+        working-directory: ./course-js-api-framework
+        run: npm install
+
+      - name: Run tests on dev
+        working-directory: ./course-js-api-framework
+        run: npm run greetings greetings_dev
 
   deploy-staging:
     runs-on: self-hosted
@@ -58,15 +86,31 @@ jobs:
         env:
           ENVIRONMENT: "staging"
           PORT: ${{ env.STAGING_PORT }}
+      - name: Stop existing staging service
+        run: pm2 delete greetings-app-staging & set "errorlevel=0"
+
+      - name: Start staging service
+        working-directory: ./python-greetings
+        run: pm2 start app.py --name greetings-app-staging -- --port ${{ env.STAGING_PORT }}
 
   test-staging:
     runs-on: self-hosted
     needs: deploy-staging
     steps:
-      - name: Tests on staging
-        uses: ./.github/actions/test
-        env:
-          ENVIRONMENT: "staging"
+      - name: Clone course-js-api-framework repository
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: mtararujs/course-js-api-framework
+          ref: main
+          path: course-js-api-framework
+
+      - name: Install test dependencies
+        working-directory: ./course-js-api-framework
+        run: npm install
+
+      - name: Run tests on staging
+        working-directory: ./course-js-api-framework
+        run: npm run greetings greetings_staging
 
   deploy-preprod:
     runs-on: self-hosted
@@ -77,15 +121,31 @@ jobs:
         env:
           ENVIRONMENT: "preprod"
           PORT: ${{ env.PREPROD_PORT }}
+      - name: Stop existing preprod service
+        run: pm2 delete greetings-app-preprod & set "errorlevel=0"
+
+      - name: Start preprod service
+        working-directory: ./python-greetings
+        run: pm2 start app.py --name greetings-app-preprod -- --port ${{ env.PREPROD_PORT }}
 
   test-preprod:
     runs-on: self-hosted
     needs: deploy-preprod
     steps:
-      - name: Tests on preprod
-        uses: ./.github/actions/test
-        env:
-          ENVIRONMENT: "preprod"
+      - name: Clone course-js-api-framework repository
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: mtararujs/course-js-api-framework
+          ref: main
+          path: course-js-api-framework
+
+      - name: Install test dependencies
+        working-directory: ./course-js-api-framework
+        run: npm install
+
+      - name: Run tests on preprod
+        working-directory: ./course-js-api-framework
+        run: npm run greetings greetings_preprod
 
   deploy-prod:
     runs-on: self-hosted
@@ -96,12 +156,9 @@ jobs:
         env:
           ENVIRONMENT: "prod"
           PORT: ${{ env.PROD_PORT }}
+      - name: Stop existing prod service
+        run: pm2 delete greetings-app-prod & set "errorlevel=0"
 
-  test-prod:
-    runs-on: self-hosted
-    needs: deploy-prod
-    steps:
-      - name: Tests on prod
-        uses: ./.github/actions/test
-        env:
-          ENVIRONMENT: "prod"
+      - name: Start prod service
+        working-directory: ./python-greetings
+        run: pm2 start app.py --name greetings-app-prod -- --port ${{ env.PROD_PORT }}
