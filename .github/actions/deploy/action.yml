@@ -3,9 +3,11 @@ inputs:
   ENVIRONMENT:
     description: ' env variable'
     required: true
+    default: 'dev'
   PORT:
     description: ' port variable'
     required: true
+    default: 7001
 runs:
   using: 'composite'
   steps:
