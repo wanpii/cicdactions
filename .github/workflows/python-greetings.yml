@@ -34,42 +34,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to dev
-        uses: ./.github/actions/deploy
+      - uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "dev"
           PORT: ${{ env.DEV_PORT }}
-      - name: Stop existing dev service
-        run: pm2 delete greetings-app-dev & set "errorlevel=0"
-
-      - name: Start dev service
-        working-directory: ./python-greetings
-        run: pm2 start app.py --name greetings-app-dev -- --port ${{ env.DEV_PORT }}
 
   test-dev:
     runs-on: ubuntu-latest
     needs: deploy-dev
     steps:
       - name: Clone course-js-api-framework repository
-        uses: actions/checkout@v3.5.2
+      - uses: ./.github/actions/test
         with:
           repository: mtararujs/course-js-api-framework
           ref: main
           path: course-js-api-framework
-
-      - name: Install test dependencies
-        working-directory: ./course-js-api-framework
-        run: npm install
-
-      - name: Run tests on dev
-        working-directory: ./course-js-api-framework
-        run: npm run greetings greetings_dev
 
   deploy-staging:
     runs-on: ubuntu-latest
     needs: test-dev
     steps:
       - name: Deploy to staging
-        uses: ./.github/actions/deploy
+      - uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "staging"
           PORT: ${{ env.STAGING_PORT }}
@@ -85,67 +71,41 @@ jobs:
     needs: deploy-staging
     steps:
       - name: Clone course-js-api-framework repository
-        uses: actions/checkout@v3.5.2
+      - uses: ./.github/actions/test
         with:
           repository: mtararujs/course-js-api-framework
           ref: main
           path: course-js-api-framework
-
-      - name: Install test dependencies
-        working-directory: ./course-js-api-framework
-        run: npm install
-
-      - name: Run tests on staging
-        working-directory: ./course-js-api-framework
-        run: npm run greetings greetings_staging
 
   deploy-preprod:
     runs-on: ubuntu-latest
     needs: test-staging
     steps:
       - name: Deploy to preprod
-        uses: ./.github/actions/deploy
+      - uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "preprod"
           PORT: ${{ env.PREPROD_PORT }}
-      - name: Stop existing preprod service
-        run: pm2 delete greetings-app-preprod & set "errorlevel=0"
 
-      - name: Start preprod service
-        working-directory: ./python-greetings
-        run: pm2 start app.py --name greetings-app-preprod -- --port ${{ env.PREPROD_PORT }}
 
   test-preprod:
     runs-on: ubuntu-latest
     needs: deploy-preprod
     steps:
       - name: Clone course-js-api-framework repository
-        uses: actions/checkout@v3.5.2
+      - uses: ./.github/actions/test
         with:
           repository: mtararujs/course-js-api-framework
           ref: main
           path: course-js-api-framework
 
-      - name: Install test dependencies
-        working-directory: ./course-js-api-framework
-        run: npm install
-
-      - name: Run tests on preprod
-        working-directory: ./course-js-api-framework
-        run: npm run greetings greetings_preprod
 
   deploy-prod:
     runs-on: ubuntu-latest
     needs: test-preprod
     steps:
       - name: Deploy to prod
-        uses: ./.github/actions/deploy
+      - uses: ./.github/actions/deploy
         env:
           ENVIRONMENT: "prod"
           PORT: ${{ env.PROD_PORT }}
-      - name: Stop existing prod service
-        run: pm2 delete greetings-app-prod & set "errorlevel=0"
-
-      - name: Start prod service
-        working-directory: ./python-greetings
-        run: pm2 start app.py --name greetings-app-prod -- --port ${{ env.PROD_PORT }}
