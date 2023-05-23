@@ -5,13 +5,9 @@ runs:
   steps:      
     - name: Stop existing app
       working-directory: python-greetings
-      run: |
-        cd python-greetings
-        pm2 delete greetings-app-$ENVIRONMENT
+      run: pm2 delete greetings-app-$ENVIRONMENT
       shell: powershell
     - name: Start app
       working-directory: python-greetings
-      run: |
-        cd python-greetings
-        pm2 start app.py --name greetings-app-$ENVIRONMENT -- --port $PORT
+      run: pm2 start app.py --name greetings-app-$ENVIRONMENT -- --port $PORT
       shell: powershell
